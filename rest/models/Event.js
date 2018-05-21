@@ -1,5 +1,9 @@
 const Admin = require('../models/Admin');
 
+/**
+ * @class Evento
+ * 
+ */
 class Evento {
   constructor(titulo,cuerpo,inicio,final,localizacion,user){
     this.titulo = titulo;
@@ -17,23 +21,32 @@ class Evento {
     if(this.checkdata()){
       let db = Admin.database().ref('posts/');
       let newE = db.push(this.getData());
+      return true
     } else {
-      return "error"
-    }
-    
+      console.warn("empty field in event");
+      this.fillDefault();
+      console.log(this)
+      return false
+    }    
   }
 
+  //comprobacion fecha
   checkdata(){
     return (this.titulo && this.cuerpo && this.inicio && this.localizacion && this.user);
   }
 
+  //hardcodeado
   fillDefault(){
-    for (let data in this) {
-      if (!data) data = "default" 
-    }
+    this.titulo || (this.titulo = "Titulo desconocido");
+    this.cuerpo || (this.cuerpo = "Cuerpo no definido");
+    this.inicio || (this.inicio = "01-01-2000");
+    this.final || (this.final = "02-01-2000");
+    this.localizacion || (this.localizacion = {lat:"0",lng:"0"});
+    this.user || (this.user = "Usuario Anonimo");
   }
 
   //doble check
+  //hardcodeado
   getData(){
     if(this.checkdata()) return ({
       "titulo":this.titulo,
