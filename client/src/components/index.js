@@ -7,6 +7,11 @@ import Home from "./home/home";
 import { Route, withRouter } from 'react-router-dom';
 import NewPost from './home/newpost';
 
+
+/**
+ * @class Index
+ * @description elemento contenedor de la aplicacion, almacena las rutas
+ */
 class Index extends React.Component {
   render() {
     return (

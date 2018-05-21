@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
+/// TODO : comentar y hacer legible
 class Map extends Component {
   constructor(props) {
     super(props)
@@ -10,10 +11,6 @@ class Map extends Component {
       lat: this.props.initialLocation.lat,
       lng: this.props.initialLocation.lng
     }
-  }
-
-  componentDidMount() {
-
   }
 
   render() {
