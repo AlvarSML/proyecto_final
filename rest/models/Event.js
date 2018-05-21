@@ -15,8 +15,8 @@ class Evento {
 
   uploadEvent(){
     if(this.checkdata()){
-      let db = admin.database().ref('posts/');
-      let newE = db.push(/*cosas*/);
+      let db = Admin.database().ref('posts/');
+      let newE = db.push(this.getData());
     } else {
       return "error"
     }
@@ -24,15 +24,18 @@ class Evento {
   }
 
   checkdata(){
-    return this.titulo && this.cuerpo && this.inicio && this.localizacion && this.user;
+    return (this.titulo && this.cuerpo && this.inicio && this.localizacion && this.user);
   }
 
   fillDefault(){
-    
+    for (let data in this) {
+      if (!data) data = "default" 
+    }
   }
 
+  //doble check
   getData(){
-    return ({
+    if(this.checkdata()) return ({
       "titulo":this.titulo,
       "cuerpo":this.cuerpo,
       "inicio":this.inicio,
@@ -43,6 +46,7 @@ class Evento {
       "usuarios":this.usuarios,
       "user":this.user
     })
+    else return false
   }
 }
 

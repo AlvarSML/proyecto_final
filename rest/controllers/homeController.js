@@ -15,9 +15,10 @@ router.get('/', (req, res) => {
 router.post('/nevento', (req, res) => {
   const b = req.body;
 
-  let evento = new Evento(b.titulo,b.cuerpo,b.inicio,b.final,b.localizacion);
+  let evento = new Evento(b.titulo,b.cuerpo,b.inicio,b.final,b.localizacion,b.user);
 
-  console.log(evento);
+  console.log(evento.getData());
+  evento.uploadEvent();
 
   res.send(evento);
 });

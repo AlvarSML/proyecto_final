@@ -52,7 +52,7 @@ class NewPost extends Component {
         titulo: data.titulo,
         cuerpo: data.cuerpo,
         inicio: data.inicio,
-        fin: data.final,
+        final: data.final,
         localizacion: data.localizacion,
         user: this.state.user
       })

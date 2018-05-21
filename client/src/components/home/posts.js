@@ -16,8 +16,8 @@ class Posts extends Component {
         let obj = this.state.posts[key];
         return (
           <section key={key} className="post">
-            <p>{obj.title}</p>
-            <p>{obj.body}</p>
+            <p>{obj.titulo}</p>
+            <p>{obj.cuerpo}</p>
             <p>{obj.user}</p>
             <button className='button'>like</button>
             <button className='button'>dislike</button>
