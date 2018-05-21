@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import firebase from 'firebase';
 
+/**
+ * @class Posts
+ * @description Genera un bloque posts para mostrar cada post
+ * @extends Component
+ * @constructor
+ * @param props (from Component)
+ */
+
 class Posts extends Component {
   constructor(p) {
     super(p);
@@ -10,14 +18,18 @@ class Posts extends Component {
     db.on('value', data => this.setState({ posts: data.val() }));
   }
 
+  /**
+   * Pasa los datos de JSON -> JSX para mostrarlos en pantalla
+   * cada post se identifica con una key para poder interactuar con ellos
+   */
   toHtml() {
     if (this.state.posts) return Object.keys(this.state.posts).map(
       (key, index) => {
         let obj = this.state.posts[key];
         return (
           <section key={key} className="post">
-            <p>{obj.title}</p>
-            <p>{obj.body}</p>
+            <p>{obj.titulo}</p>
+            <p>{obj.cuerpo}</p>
             <p>{obj.user}</p>
             <button className='button'>like</button>
             <button className='button'>dislike</button>
@@ -26,6 +38,10 @@ class Posts extends Component {
         )
       })
   }
+
+  /**
+   * Renderiza el elemento JSX -> HTML
+   */
 
   render() {
     return (

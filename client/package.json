@@ -1,0 +1,32 @@
+{
+  "name": "proyectofinal",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "firebase": "^5.0.0",
+    "google": "^2.1.0",
+    "google-map-react": "^1.0.2",
+    "google-maps": "^3.3.0",
+    "google-maps-react": "^2.0.2",
+    "loadjs": "^3.5.4",
+    "npm": "^6.0.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-firebase-file-uploader": "^2.4.1",
+    "react-google-maps": "^9.4.5",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.4",
+    "recompose": "^0.27.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "concurrently": "^3.5.1"
+  }
+}

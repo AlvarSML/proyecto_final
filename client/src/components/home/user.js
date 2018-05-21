@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 //import { Redirect, browserHistory } from 'react-router-dom';
 import firebase from 'firebase';
 
+
+/**
+ * @class User
+ * @description Genera el perfil del usuario
+ * @constructor
+ * @param props
+ */
 class User extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +19,10 @@ class User extends Component {
     }
   }
 
+  /**
+   * Comportamiento del componente una vez se ha montado
+   * Se obtienen los datos del usuario y se guardan en el estado
+   */
   componentWillMount(){
     firebase.auth().onAuthStateChanged(user => {
       const storage = firebase.storage().ref(`profiles/${user.email}.jpg`);
@@ -31,6 +42,9 @@ class User extends Component {
     });
   }
 
+   /**
+   * Renderiza el elemento JSX -> HTML
+   */
   render() {
     return (
       <div id='user' className="block">

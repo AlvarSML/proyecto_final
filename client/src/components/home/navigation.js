@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import { withRouter } from 'react-router-dom';
 
-class navigation extends Component {
+
+/**
+ * @class Navigation
+ * @description Barra de navegacion de la pagina
+ * @constructor 
+ * @param props
+ */
+class Navigation extends Component {
   constructor(props) {
     super(props);
 
@@ -13,6 +20,9 @@ class navigation extends Component {
 
   }
 
+  /**
+   * Comportamiento al clickar editar perfil
+   */
   config() {
     if (this.props.location.pathname !== "/home/config") this.props.history.push("/home/config")
     else this.props.history.push("/home")
@@ -26,15 +36,24 @@ class navigation extends Component {
     });
   }
 
+  /**
+   * Comportamiento al clickar nuevo evento
+   */
   nevento() {
     if (this.props.location.pathname !== "/home/nevento") this.props.history.push("/home/nevento")
     else this.props.history.push("/home")
   }
 
+  /**
+   * Comportamiento al clickar nuevo evento
+   */
   inicio() {
     this.props.history.push("/home");
   }
 
+   /**
+   * Renderiza el elemento JSX -> HTML
+   */
   render() {
     return (
       <nav className="block flex">
@@ -47,4 +66,4 @@ class navigation extends Component {
   }
 }
 
-export default withRouter(navigation);
+export default withRouter(Navigation);

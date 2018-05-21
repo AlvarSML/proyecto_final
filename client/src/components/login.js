@@ -2,6 +2,14 @@ import React from "react";
 import firebase from "./firebase";
 import { withRouter } from 'react-router-dom';
 
+
+/**
+ * @class Login
+ * @description Componente del login de la aplicacion, comprueba los datos en 
+ * lado cliente y los envia usando la API de firebase
+ * @constructor
+ * @param props
+ */
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -12,9 +20,8 @@ class Login extends React.Component {
       error: ' '  
     }
 
-    const user = firebase.auth().currentUser;
-
-    if (user)this.props.history.push('/home');
+    // Si estas autenticado se te redirije a Home
+    firebase.auth().onAuthStateChanged(user=>{if(user) return this.props.history.push('/home')});
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,6 +37,10 @@ class Login extends React.Component {
   }
 
   //refactorizar
+  /**
+   * Gestiona el envio de datos en el submit
+   * @param {Event} e 
+   */
   handleSubmit(e) {
     e.preventDefault();
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
@@ -44,6 +55,9 @@ class Login extends React.Component {
     });    
   }
 
+  /**
+  * Renderiza el elemento JSX -> HTML
+  */
   render() {
     return (
       <form id='login' onSubmit={this.handleSubmit} method='post'>

@@ -1,6 +1,14 @@
 import React from "react";
 import firebase from "firebase";
 
+
+/**
+ * @class Registro
+ * @description Elemento con el formulario para registrarse 
+ * @constructor
+ * @param props
+ * @todo pasar al lado servidor para comprobar datos de forma mas fiable
+ */
 class Registro extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +27,10 @@ class Registro extends React.Component {
     console.log(this.state);
   }
 
+  /**
+   * Control del submit del formulario
+   * @param {Event} e 
+   */
   handleSubmit(e) {
     e.preventDefault();
 
@@ -34,6 +46,10 @@ class Registro extends React.Component {
 
   }
 
+  /**
+   * Control de los datos introducidos en el formulario
+   * @param {Event} e 
+   */
   handleChange(e) {
     const value = e.target.value;
     const name = e.target.name;
@@ -43,6 +59,9 @@ class Registro extends React.Component {
     });
   }
 
+  /**
+  * Renderiza el elemento JSX -> HTML
+  */
   render() {
     return (
       <form onSubmit={this.handleSubmit} method='post'>

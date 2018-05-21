@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 
-class config extends Component {
+/// TODO: cambiar la configuracion individualmente
+
+/**
+ * @class Config
+ * @description Modifica el perfil del usuario
+ */
+class Config extends Component {
   constructor(props) {
     super(props);
 
@@ -11,17 +17,14 @@ class config extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    firebase.auth().onAuthStateChanged(user => this.setState({user: user}));
   }
 
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      return this.setState({
-        user: user
-      });
-    });
-  }
-
-
+  /**
+   * Modificacion del estado con los cambios en los input
+   * @param {Event} e 
+   */
   handleChange(e) {
     const value = e.target.value;
     const name = e.target.name;
@@ -31,10 +34,13 @@ class config extends Component {
     });
   }
 
-  //refactorizar
+  // Pasar al servidor, actualizar al enviar
+  /**
+   * Manejo del submit del formulario
+   * @param {Event} e 
+   */
   handleSubmit(e) {
-    e.preventDefault();
-
+    e.preventDefault()
     this.setState({
       email: this.state.user.email
     });
@@ -58,9 +64,11 @@ class config extends Component {
 
     });
 
-
   }
 
+  /**
+   * Paso de JSX -> HTML
+   */
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -79,4 +87,4 @@ class config extends Component {
   }
 }
 
-export default config;
+export default Config;
