@@ -1,0 +1,171 @@
+html{
+  background-color: #fdc57b;
+  font-family: Montserrat;
+}
+
+#container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+#home, form{
+  max-width: 30%;;
+}
+
+/* Componentes Cabezera */
+
+header {
+  color: #394a51;
+  margin: 0 auto;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+  font-size: 15px;
+  display: block;
+}
+
+/* Componentes Formularios */
+
+form, .block {
+  background-color: #fbf2d5;
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: .5em;
+  color: #394a51;
+  min-width: 30em;
+}
+
+input, .button, textarea {
+  border: 2px solid #7fa99b;
+  background-color: #7fa99b;
+  border-radius: .2em;
+  color: #394a51;
+  font-family: Montserrat;
+  font-weight: 900;
+  height: 1.7em;
+}
+
+form > * {
+  display: flex;
+  margin: 0 0 1em 0;
+  /*justify-content: center;*/
+}
+
+#user > img {
+  position: relative;
+  width: 8em;
+  border-radius: 10%; 
+}
+
+input[type=text], input[type=password], input[type=email], input[type=file], textarea{
+  margin: 0 10px ;
+  padding: 2px;
+  width: 100%;
+  border: 2px solid #7fa99b;
+  background-color: #7fa99b;
+  border-radius: .2em;
+  color: #394a51;
+  font-family: Montserrat;
+  font-weight: 900;
+  box-shadow: none;
+}
+
+input[type=file] {
+  overflow: hidden;
+}
+
+input[type=submit] {
+  margin: 0;
+}
+
+input[type=submit]:active, .button:active{
+  background-color: #fdc57b;
+  border: 2px solid #fdc57b;
+}
+
+/* Validaciones */
+input[type=email]:invalid:focus {
+  border: 2px solid #b84444;
+  outline: none;
+}
+
+input[type=email]:invalid {
+  border: 2px solid #7fa99b;
+}
+
+input[type=email]:valid:focus {
+  border: 2px solid #68c568;
+  outline: none;
+}
+
+label > p {
+  margin:0;
+  width: 30%;
+}
+
+
+/* Navigation */
+
+.flex {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+}
+
+/* Perfil usuario */
+
+#user {
+  display: flex;
+  flex-flow: column;
+  align-items: center; 
+}
+
+/* posts */
+
+#posts {
+  flex-flow: column;
+}
+
+#posts > section > button {
+  background-color: #394a51;
+  color: #fbf2d5;
+  margin: .2em 0;
+}
+
+.post {
+  background-color: #7fa99b;
+  border-radius: .2em;
+  margin: .5em 0;
+  padding: 0 .5em;
+  width: calc(100% - 1em);
+}
+
+/* home */
+
+#home {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+/* map */
+#mapContainer {
+  width: 100%;
+  margin: .5 auto;
+  align-self: center;
+}
+
+#mapContaner * {
+  width: 100%;
+}
+
+#map {
+  width: 100%;
+  border-radius: .3em;  
+}
+
