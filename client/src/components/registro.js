@@ -1,6 +1,4 @@
 import React from "react";
-import firebase from "firebase";
-
 
 /**
  * @class Registro
@@ -15,7 +13,7 @@ class Registro extends React.Component {
 
     this.state = {
       user: "",
-      username:"",
+      username: "",
       pass: "",
       passr: "",
       email: ""
@@ -23,8 +21,8 @@ class Registro extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.checkPasswords = this.checkPasswords.bind(this);
 
-    console.log(this.state);
   }
 
   /**
@@ -33,16 +31,21 @@ class Registro extends React.Component {
    */
   handleSubmit(e) {
     e.preventDefault();
+    const data = this.state
 
-    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass).then(user=>{
-      return user.updateProfile({displayName:this.state.user})
-    }).catch(error => {
-      // Handle Errors here.
-      // var errorCode = error.code;
-      var errorMessage = error.message;
-      this.setState({error:errorMessage});
-      // ...
-    });
+    if(this.checkPasswords())fetch('/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: data.email,
+        pass: data.pass,
+        name: data.user
+      })
+    }).then(resp => resp.json())
+      .then(data => this.setState({ error: data.respuesta }))
 
   }
 
@@ -53,10 +56,19 @@ class Registro extends React.Component {
   handleChange(e) {
     const value = e.target.value;
     const name = e.target.name;
-    
+
     this.setState({
       [name]: value
     });
+  }
+
+  checkPasswords(){
+    let res = (this.state.pass === this.state.passr)
+    if(!res)this.setState({error:'las contraseñas son diferentes'});
+    else this.setState({error:''});
+    console.log(res);
+    console.log(this.state);
+    return res;
   }
 
   /**
@@ -65,26 +77,27 @@ class Registro extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit} method='post'>
-      <h3>Registro</h3>
-      <label>
-      <p>Email:</p>
-        <input type="email" name="email" value={this.state.email} onChange={this.handleChange} pattern="^(\w+\W{1}){2}(\w+){1}" required/>
-      </label>
-      <label>
-      <p>Usuario:</p>
-        <input type="text" name="user"  value={this.state.user} onChange={this.handleChange}/>
-      </label>
-      <label>
-      <p>Contraseña:</p>
-        <input type="password" name="pass"  value={this.state.pass} onChange={this.handleChange}/>
-      </label>
-      <label>
-      <p>Repite la contraseña:</p>
-        <input type="password" name="passr" />
-      </label>
-      <input type="submit" value="Submit" />
-      <p>{this.state.error}</p>
-    </form>
+        <h3>Registro</h3>
+        <label>
+          <p>Email:</p>
+          <input type="email" name="email" value={this.state.email} onChange={this.handleChange} pattern="^(\w+\W{1}){2}(\w+){1}" required />
+        </label>
+        <label>
+          <p>Usuario:</p>
+          <input type="text" name="user" value={this.state.user} onChange={this.handleChange} />
+        </label>
+        <label>
+          <p>Contraseña:</p>
+          <input type="password" name="pass" value={this.state.pass} onChange={this.handleChange} pattern="^[\d\w ]{8,}$" />
+        </label>
+        <label>
+          <p>Repite la contraseña:</p>
+          <input type="password" name="passr" value={this.state.passr} onChange={this.handleChange}/>
+        </label>
+        <i>La contraseña tiene que tener al menos 8 caracteres</i>
+        <p style={{color:"red"}}>{this.state.error}</p>
+        <input type="submit" value="Submit" />        
+      </form>
     );
   }
 }

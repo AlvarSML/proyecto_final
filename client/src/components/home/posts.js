@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import firebase from 'firebase';
-
+import Post from './post';
 /**
  * @class Posts
  * @description Genera un bloque posts para mostrar cada post
@@ -16,6 +16,7 @@ class Posts extends Component {
     const db = firebase.database().ref('posts');
     db.once('value', data => this.setState({ posts: data.val() }));
     db.on('value', data => this.setState({ posts: data.val() }));
+
   }
 
   /**
@@ -25,16 +26,15 @@ class Posts extends Component {
   toHtml() {
     if (this.state.posts) return Object.keys(this.state.posts).map(
       (key, index) => {
-        let obj = this.state.posts[key];
+        const obj = this.state.posts[key];
         return (
-          <section key={key} className="post">
-            <p>{obj.titulo}</p>
-            <p>{obj.cuerpo}</p>
-            <p>{obj.user}</p>
-            <button className='button'>like</button>
-            <button className='button'>dislike</button>
-            <button className='button'>go</button>
-          </section>
+          <Post            
+            titulo={obj.titulo}
+            cuerpo={obj.cuerpo}
+            user={obj.user}
+            keyValue={key}
+            key={key}
+          />
         )
       })
   }

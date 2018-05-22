@@ -131,7 +131,7 @@ label > p {
   flex-flow: column;
 }
 
-#posts > section > button {
+#posts > section  button {
   background-color: #394a51;
   color: #fbf2d5;
   margin: .2em 0;
@@ -145,6 +145,14 @@ label > p {
   width: calc(100% - 1em);
 }
 
+.post > div {
+  display: flex;
+}
+
+.post > div > * {
+  margin: 0 2em;
+  align-self: center;
+}
 /* home */
 
 #home {
