@@ -13,10 +13,10 @@ router.post('/', (req, res) => {
   let user = new User(b.email,b.name,b.pass);
 
   if (user.checkFields()){
-    console.log('campos correctos')
-    user.createUser()
+    console.log('campos correctos');
+    user.createUser();
     user.getUid();
-    //user.createRegister()
+    user.crearRegistro();
     res.send({respuesta:'creado correctamente'})
   } else {
     console.log('campos incorrectos')

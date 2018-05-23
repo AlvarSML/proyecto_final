@@ -42,7 +42,6 @@ class Posts extends Component {
   /**
    * Renderiza el elemento JSX -> HTML
    */
-
   render() {
     return (
       <div className="block flex" id="posts">

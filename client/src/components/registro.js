@@ -66,8 +66,6 @@ class Registro extends React.Component {
     let res = (this.state.pass === this.state.passr)
     if(!res)this.setState({error:'las contraseñas son diferentes'});
     else this.setState({error:''});
-    console.log(res);
-    console.log(this.state);
     return res;
   }
 

@@ -15,17 +15,12 @@ class User {
   validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let mail = re.test(String(email).toLowerCase());
-
-    if (!mail) console.log('email incorrecto'); 
-
     return mail
   }
 
   validatePass(pass) {
     const re =/^[\d\w ]{8,}$/;
     let passw = re.test(pass);
-    console.log(pass);
-    if (!passw) console.log('pass incorrecto');
     return passw;
   }
 
@@ -35,6 +30,14 @@ class User {
 
   getUid(){
     Admin.auth().getUserByEmail(this.email).then(user=>this.uid=user.uid);
+  }
+
+  crearRegistro(){
+    const db = Admin.database().ref('usuarios');
+    db.push({
+      datos:'dara'
+      //añadir datos
+    });
   }
 
   createUser() {
