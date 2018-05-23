@@ -35,8 +35,9 @@ class User {
   crearRegistro(){
     const db = Admin.database().ref('usuarios');
     db.push({
-      datos:'dara'
-      //añadir datos
+      uid:this.uid,
+      posts:[],
+      privilegios:1
     });
   }
 

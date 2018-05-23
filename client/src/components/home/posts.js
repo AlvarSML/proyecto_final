@@ -13,9 +13,9 @@ class Posts extends Component {
   constructor(p) {
     super(p);
     this.state = {};
-    const db = firebase.database().ref('posts');
-    db.once('value', data => this.setState({ posts: data.val() }));
-    db.on('value', data => this.setState({ posts: data.val() }));
+    this.db = firebase.database().ref('posts');
+    this.db.once('value', data => this.setState({ posts: data.val() }));
+    this.db.on('value', data => this.setState({ posts: data.val() }));
 
   }
 
@@ -34,6 +34,7 @@ class Posts extends Component {
             user={obj.user}
             keyValue={key}
             key={key}
+            likes={obj.positivos}
           />
         )
       })

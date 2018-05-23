@@ -17,6 +17,7 @@ class User extends Component {
       img: '',
       status: ''
     }
+    firebase.auth().onAuthStateChanged(user => this.setState({userName: user.displayName}));
   }
 
   /**
@@ -25,7 +26,7 @@ class User extends Component {
    */
   componentWillMount(){
     firebase.auth().onAuthStateChanged(user => {
-      const storage = firebase.storage().ref(`profiles/${user.email}.jpg`);
+      const storage = firebase.storage().ref(`profiles/${user.uid}.jpg`);
       storage.getDownloadURL().then(url=>{
         this.setState({
           img:url
