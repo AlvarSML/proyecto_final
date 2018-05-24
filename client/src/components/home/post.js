@@ -9,18 +9,27 @@ class Post extends Component {
       likes: 0,
       user: props.user,
       titulo: props.titulo || '[error]',
-      cuerpo: props.cuerpo || '[error cuerpo]'
+      cuerpo: props.cuerpo || '[error cuerpo]',
+      asistentes: 0
     }
 
     this.like = this.like.bind(this);
+    this.go = this.go.bind(this);
 
   }
 
-  componentWillMount(){    
-    let post = firebase.database().ref('/posts').child(this.state.key).child('positivos');
+  componentWillMount(){
+    const db = firebase.database().ref('/posts').child(this.state.key);
+    //cargar likes
+    let post = db.child('positivos');
     post.once('value',data=>this.setState({likes:data.val()}));
     post.on('value',data=>this.setState({likes:data.val()}))
-    console.log(this.state.likes)
+
+    //cargar asistentes
+    let assist = db.child('asistentes');
+    assist.once('value',data=>{this.setState({asistentes:data.val()})})
+    assist.on('value',data=>{this.setState({asistentes:data.val()})})
+   
   }
 
   /**
@@ -53,6 +62,34 @@ class Post extends Component {
     }
   }
 
+
+  // !!! repite patron
+  go(){
+    let going = false;
+    let asistentes;
+
+    if (this.state.asistentes === 0) {
+      asistentes = {};
+    } else {
+      asistentes = this.state.asistentes;
+    }
+
+    for (let key in asistentes) {
+      if (asistentes[key][this.state.user]) going = true
+    }
+
+    if (!going) {
+  
+      this.setState({
+        asistentes: asistentes
+      })
+
+      let post = firebase.database().ref('/posts').child(this.state.key).child('asistentes');
+      post.push({[this.state.user]:true})
+    }
+
+  }
+
   render() {
     return (
       <section key={this.state.key} className="post">
@@ -60,10 +97,8 @@ class Post extends Component {
         <p>{this.state.cuerpo}</p>
         <p>{this.state.user}</p>
         <div>
-          <p>{Object.keys(this.state.likes||{}).length}</p>
-          <button name="like" className='button' onClick={this.like}>like</button>
-          <button className='button'>dislike</button>
-          <button className='button'>go</button>
+          <button name="like" className='button' onClick={this.like}>{Object.keys(this.state.likes||{}).length} like</button>
+          <button className='button' onClick={this.go}>{Object.keys(this.state.asistentes||{}).length} go</button>
         </div>
       </section>
     )
