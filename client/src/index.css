@@ -10,7 +10,36 @@ html{
 }
 
 #home, form{
-  max-width: 30%;;
+  width: 35em;
+  align-self: flex-start;
+}
+
+/* map */
+#mapContainer {
+  width: 100%;
+  margin: .5 auto;
+  align-self: center;
+}
+
+#mapContaner * {
+  width: 100%;
+}
+
+#map {
+  width: 100%;
+  border-radius: .3em;  
+}
+
+hr {
+  color: #fbf2d5;
+  border: 1.5px solid;
+  border-radius: .2em;
+}
+
+.titulo {
+  font-size: 1.5em;
+  font-weight: 900;
+  text-align: center;
 }
 
 /* Componentes Cabezera */
@@ -38,6 +67,10 @@ form, .block {
   border-radius: .5em;
   color: #394a51;
   min-width: 30em;
+}
+
+.block img {
+  width: 10em;
 }
 
 input, .button, textarea {
@@ -131,7 +164,7 @@ label > p {
   flex-flow: column;
 }
 
-#posts > section > button {
+#posts > section  button {
   background-color: #394a51;
   color: #fbf2d5;
   margin: .2em 0;
@@ -145,6 +178,18 @@ label > p {
   width: calc(100% - 1em);
 }
 
+.post > div {
+  display: flex;
+}
+
+.buttonContainer{
+  margin: .5em 0;
+}
+
+.post > div > * {
+  margin: 0 2em;
+  align-self: center;
+}
 /* home */
 
 #home {
@@ -153,19 +198,4 @@ label > p {
   flex-direction: column;
 }
 
-/* map */
-#mapContainer {
-  width: 100%;
-  margin: .5 auto;
-  align-self: center;
-}
-
-#mapContaner * {
-  width: 100%;
-}
-
-#map {
-  width: 100%;
-  border-radius: .3em;  
-}
 

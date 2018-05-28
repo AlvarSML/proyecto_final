@@ -113,9 +113,6 @@ class NewPost extends Component {
         <label htmlFor="map">
           Ubicacion: {'{' + this.state.localizacion.lat + "," + this.state.localizacion.lng + '}'}
         </label>
-        <label>
-          {`Usuario: ${this.state.user}`}
-        </label>
         <MapComponent
           initialLocation={this.state.localizacion}
           initialZoom={5}

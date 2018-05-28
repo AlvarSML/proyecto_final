@@ -38,6 +38,7 @@ class Config extends Component {
   /**
    * Manejo del submit del formulario
    * @param {Event} e 
+   * @todo datos individuales, actualizar pagina
    */
   handleSubmit(e) {
     e.preventDefault()
@@ -47,7 +48,7 @@ class Config extends Component {
 
 
     const file = e.target.image.files[0];
-    const storageRef = firebase.storage().ref(`profiles/${this.state.user.email}.jpg`);
+    const storageRef = firebase.storage().ref(`profiles/${this.state.user.uid}.jpg`);
     const task = storageRef.put(file);
 
     console.log(task);

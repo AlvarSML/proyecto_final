@@ -1,36 +1,24 @@
 // home controller routes
-var express = require('express');
-var router = express.Router();
-
-let admin = require('../models/Admin');
-
+const express = require('express');
+const router = express.Router();
+const admin = require('../models/Admin');
 const Evento = require('../models/Event');
 
-// get /api/home/
-router.get('/', (req, res) => {
-  
-});
-
-// post /api/home/
+/**
+ * Router de las peticiones post a /home/nevento
+ * devuelve true/false segun si se ha podido subir
+ */
 router.post('/nevento', (req, res) => {
   const b = req.body;
-
-  let evento = new Evento(b.titulo,b.cuerpo,b.inicio,b.final,b.localizacion,b.user);
-
+  let evento = new Evento(b.titulo, b.cuerpo, b.inicio, b.final, b.localizacion, b.user);
   console.log(evento.getData());
-  evento.uploadEvent();
-
-  res.send(evento);
+  res.send(evento.uploadEvent())
 });
 
-// put /api/home/
-router.put('/', (req, res) => {
-  res.send('PUT response');
-});
+//manejo de likes
+router.post('/', (req, res) => {
+  const b = req.body;
 
-// delete /api/home/
-router.delete('/', (req, res) => {
-  res.send('DELETE response');
-});
+})
 
 module.exports = router; 
