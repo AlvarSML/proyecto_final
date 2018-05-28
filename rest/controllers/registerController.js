@@ -10,13 +10,12 @@ const User = require('../models/User');
  */
 router.post('/', (req, res) => {
   const b = req.body;
+  console.log(b.email);
   let user = new User(b.email,b.name,b.pass);
 
   if (user.checkFields()){
     console.log('campos correctos');
     user.createUser();
-    user.getUid();
-    user.crearRegistro();
     res.send({respuesta:'creado correctamente'})
   } else {
     console.log('campos incorrectos')

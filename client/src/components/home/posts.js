@@ -13,18 +13,19 @@ class Posts extends Component {
   constructor(p) {
     super(p);
     this.state = {};
-    this.db = firebase.database().ref('posts');
+    this.db = firebase.database().ref('posts').orderByChild('inicio');
     this.db.once('value', data => this.setState({ posts: data.val() }));
     this.db.on('value', data => this.setState({ posts: data.val() }));
-
+    firebase.auth().onAuthStateChanged(user=>this.setState({user:user}))
   }
 
   /**
    * Pasa los datos de JSON -> JSX para mostrarlos en pantalla
    * cada post se identifica con una key para poder interactuar con ellos
+   * muestra los 20 ultimos (funcion map)
    */
   toHtml() {
-    if (this.state.posts) return Object.keys(this.state.posts).map(
+    if (this.state.posts) return Object.keys(this.state.posts).slice(0,20).map(
       (key, index) => {
         const obj = this.state.posts[key];
         return (
@@ -35,6 +36,7 @@ class Posts extends Component {
             keyValue={key}
             key={key}
             likes={obj.positivos}
+            currUser={this.state.user}
           />
         )
       })
@@ -46,7 +48,7 @@ class Posts extends Component {
   render() {
     return (
       <div className="block flex" id="posts">
-        <p>Ultimos Posts</p>
+        <p>Ultimos Eventos</p>
         {this.toHtml()}
       </div>
     )

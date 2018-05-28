@@ -1,104 +1,104 @@
 import React, { Component } from "react";
 import firebase from 'firebase';
+import MapComponent from './mapsapi';
+
+/**
+ * @TODO :
+ *  - paso al servidor de la gestion de likes y asistentes
+ *  - generacion de mapas para eventos
+ *  - boton de compartir
+ *  - link en el nombre del evento y del usuario
+ *  - imagen del usuario
+ */
 
 class Post extends Component {
   constructor(props) {
     super(props)
     this.state = {
       key: props.keyValue,
-      likes: 0,
+      location: {},
+      positivos: 0,
       user: props.user,
+      name: props.user.displayName || '[Usuario]',
       titulo: props.titulo || '[error]',
       cuerpo: props.cuerpo || '[error cuerpo]',
-      asistentes: 0
+      asistentes: 0,
+      currUser: props.currUser
     }
 
-    this.like = this.like.bind(this);
-    this.go = this.go.bind(this);
+    this.genericIncrement = this.genericIncrement.bind(this);
 
   }
 
-  componentWillMount(){
+
+  // TODO: optimizar
+  componentWillMount() {
     const db = firebase.database().ref('/posts').child(this.state.key);
     //cargar likes
     let post = db.child('positivos');
-    post.once('value',data=>this.setState({likes:data.val()}));
-    post.on('value',data=>this.setState({likes:data.val()}))
+    post.once('value', data => this.setState({ likes: data.val() }));
+    post.on('value', data => this.setState({ likes: data.val() }))
 
     //cargar asistentes
     let assist = db.child('asistentes');
-    assist.once('value',data=>{this.setState({asistentes:data.val()})})
-    assist.on('value',data=>{this.setState({asistentes:data.val()})})
-   
+    assist.once('value', data => { this.setState({ asistentes: data.val() }) })
+    assist.on('value', data => { this.setState({ asistentes: data.val() }) })
+
+    //cargar localizacion
+    let loc = db.child('localizacion');
+    loc.once('value', data => this.setState({location:data.val()}) );
+
+    //cargar datos del usuario
+    let item = firebase.database()
+      .ref('/usuarios')
+      .orderByChild('userid')
+      .equalTo(this.state.user)
+      .limitToFirst(1)
+
+    item.once('value', data => this.setState({name:(data.val()[Object.keys(data.val())[0]].nombre)}))
+
   }
 
   /**
-   * @todo posible paso al servidor 
+   * Funcion que inserta un usuario en un campo si no esta previamente
+   * Depende del nombre del boton en el que se ejecute
+   * @param {Event} e 
    */
-  like(e) {
-    let liked = false;
-    let likes;
+  genericIncrement(e) {
+    let element = e.target.name;
+    let field = {};
 
-    if (this.state.likes === 0) {
-      likes = {};
-    } else {
-      likes = this.state.likes;
+    //previene nulos
+    if (!this.state[element] === 0 || !this.state[element] === null) {
+      field = this.state[element]
     }
 
-    for (let key in likes) {
-      console.log(this.state.likes[key][this.state.user])
-      if (this.state.likes[key][this.state.user]) liked = true
+    if (!field[this.state.currUser.uid]) {
+      let post = firebase.database().ref('/posts').child(this.state.key).child(element);
+      post.update({ [this.state.currUser.uid]: true })
     }
-
-    if (!liked) {
-  
-      this.setState({
-        likes: likes
-      })
-
-      let post = firebase.database().ref('/posts').child(this.state.key).child('positivos');
-      post.push({[this.state.user]:true})
-      this.setState({[this.state.user]:true});
-    }
-  }
-
-
-  // !!! repite patron
-  go(){
-    let going = false;
-    let asistentes;
-
-    if (this.state.asistentes === 0) {
-      asistentes = {};
-    } else {
-      asistentes = this.state.asistentes;
-    }
-
-    for (let key in asistentes) {
-      if (asistentes[key][this.state.user]) going = true
-    }
-
-    if (!going) {
-  
-      this.setState({
-        asistentes: asistentes
-      })
-
-      let post = firebase.database().ref('/posts').child(this.state.key).child('asistentes');
-      post.push({[this.state.user]:true})
-    }
-
   }
 
   render() {
     return (
       <section key={this.state.key} className="post">
-        <p>{this.state.titulo}</p>
-        <p>{this.state.cuerpo}</p>
-        <p>{this.state.user}</p>
-        <div>
-          <button name="like" className='button' onClick={this.like}>{Object.keys(this.state.likes||{}).length} like</button>
-          <button className='button' onClick={this.go}>{Object.keys(this.state.asistentes||{}).length} go</button>
+        <section>
+          <div>
+            <p className="titulo">{this.state.titulo}</p>
+            <hr />
+            <p>{this.state.cuerpo}</p>
+            <p>{this.state.name} (Ver perfil)</p>
+          </div>
+          <MapComponent
+            initialLocation={this.state.location}
+            initialZoom={5}
+            isMarkerShown
+          />
+        </section>
+        <div className="buttonContainer">
+          <button name="positivos" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.likes || {}).length} me gusta</button>
+          <button name="asistentes" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.asistentes || {}).length} voy a ir</button>
+          <button name="compartir" className='button'>Compartir</button>
         </div>
       </section>
     )

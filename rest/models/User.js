@@ -19,7 +19,7 @@ class User {
   }
 
   validatePass(pass) {
-    const re =/^[\d\w ]{8,}$/;
+    const re = /^[\d\w ]{8,}$/;
     let passw = re.test(pass);
     return passw;
   }
@@ -28,17 +28,23 @@ class User {
     return !(user == null || user == "" || user == " ")
   }
 
-  getUid(){
-    Admin.auth().getUserByEmail(this.email).then(user=>this.uid=user.uid);
+  getUid() {
+    console.log(this.email);
+    Admin.auth().getUserByEmail(this.email).then(user => this.uid = user.uid);
+    console.log(this.uid)
   }
 
-  crearRegistro(){
+  crearRegistro(uid, nombre) {
     const db = Admin.database().ref('usuarios');
     db.push({
-      uid:this.uid,
-      posts:[],
-      privilegios:1
-    });
+      userid: uid,
+      posts: [],
+      privilegios: 1,
+      nombre: nombre,
+      imagen: 'default.jpg'
+    })
+
+
   }
 
   createUser() {
@@ -49,9 +55,7 @@ class User {
       password: this.pass,
       displayName: this.nombre,
       disabled: false
-    }).then(userRecord => this.uid = userRecord.uid)
-
-    console.log(this.uid);
+    }).then(userRecord => this.crearRegistro(userRecord.uid, userRecord.displayName)).catch(error => console.log(error));
   }
 }
 

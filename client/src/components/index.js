@@ -6,6 +6,7 @@ import Registro from "./registro";
 import Home from "./home/home";
 import { Route, withRouter } from 'react-router-dom';
 import NewPost from './home/newpost';
+import Profile from './profile';
 
 
 /**
@@ -19,8 +20,9 @@ class Index extends React.Component {
         <Header />
         <div id="container">
           <Route exact path='/' component={() => <div><Login /><Registro /></div>} />
-          <Route path='/home*' component={Home} />
           <Route path="*/nevento" component={NewPost} />
+          <Route path='/home*' component={Home} />          
+          <Route path="/users/:uid" component={Profile} />
         </div>
       </div>
     );
