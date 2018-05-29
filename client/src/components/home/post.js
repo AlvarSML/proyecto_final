@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import firebase from 'firebase';
 import MapComponent from './mapsapi';
+import { Link } from 'react-router-dom';
 
 /**
  * @TODO :
@@ -16,13 +17,15 @@ class Post extends Component {
     super(props)
     this.state = {
       key: props.keyValue,
-      location: {},
-      positivos: 0,
+      location: props.location,
+      positivos: props.positivos,
+      inicio: props.inicio,
+      final: props.final,
       user: props.user,
       name: props.user.displayName || '[Usuario]',
       titulo: props.titulo || '[error]',
       cuerpo: props.cuerpo || '[error cuerpo]',
-      asistentes: 0,
+      asistentes: props.asistentes,
       currUser: props.currUser
     }
 
@@ -34,28 +37,22 @@ class Post extends Component {
   // TODO: optimizar
   componentWillMount() {
     const db = firebase.database().ref('/posts').child(this.state.key);
-    //cargar likes
+    //escuchar likes
     let post = db.child('positivos');
-    post.once('value', data => this.setState({ likes: data.val() }));
     post.on('value', data => this.setState({ likes: data.val() }))
 
-    //cargar asistentes
+    //escuchar asistentes
     let assist = db.child('asistentes');
-    assist.once('value', data => { this.setState({ asistentes: data.val() }) })
     assist.on('value', data => { this.setState({ asistentes: data.val() }) })
 
-    //cargar localizacion
-    let loc = db.child('localizacion');
-    loc.once('value', data => this.setState({location:data.val()}) );
-
-    //cargar datos del usuario
+    //cargar datos del usuario creador
     let item = firebase.database()
       .ref('/usuarios')
       .orderByChild('userid')
       .equalTo(this.state.user)
       .limitToFirst(1)
 
-    item.once('value', data => this.setState({name:(data.val()[Object.keys(data.val())[0]].nombre)}))
+    item.once('value', data => this.setState({ name: (data.val()[Object.keys(data.val())[0]].nombre) }))
 
   }
 
@@ -82,24 +79,29 @@ class Post extends Component {
   render() {
     return (
       <section key={this.state.key} className="post">
-        <section>
           <div>
             <p className="titulo">{this.state.titulo}</p>
             <hr />
             <p>{this.state.cuerpo}</p>
-            <p>{this.state.name} (Ver perfil)</p>
+            <p>El evento empezara el dia: {this.state.inicio}</p>
+            <p>Y terminara el dia: {this.state.final}</p>
+            <p></p>
+            <hr />
+            <p>Creado por:</p>
+            <Link to={`/users/${this.state.user}`}>{this.state.name}</Link>
+            <hr />
+            <div className="buttonContainer">
+              <button name="positivos" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.likes || {}).length} me gusta</button>
+              <button name="asistentes" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.asistentes || {}).length} voy a ir</button>
+              <button name="compartir" className='button'>Compartir</button>
+            </div>
           </div>
-          <MapComponent
-            initialLocation={this.state.location}
-            initialZoom={5}
-            isMarkerShown
+          <img
+            src={`https://maps.googleapis.com/maps/api/staticmap?center=${this.state.location.lat},${this.state.location.lng}&zoom=11&size=400x400\
+              &markers=color:red%7C${this.state.location.lat},${this.state.location.lng}
+              &key=AIzaSyACjVIcxYixmV3QHW8PFjUvlcUtxyZQHlY`}
+            alt='map'
           />
-        </section>
-        <div className="buttonContainer">
-          <button name="positivos" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.likes || {}).length} me gusta</button>
-          <button name="asistentes" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.asistentes || {}).length} voy a ir</button>
-          <button name="compartir" className='button'>Compartir</button>
-        </div>
       </section>
     )
   }

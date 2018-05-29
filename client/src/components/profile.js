@@ -1,3 +1,7 @@
+/**
+ * TODO : posible carga directa desde el servidor, al menos de los datos
+ */
+
 import React, { Component } from 'react';
 import firebase from 'firebase';
 
@@ -6,10 +10,22 @@ class Profile extends Component {
     super(props)
     this.state = {
       user: {},
-      img: ''
+      img: '',
+      id: props.match.params.uid,
+      posts: []
     }
+
+    firebase.database()
+      .ref('/posts')
+      .orderByChild('user')
+      .equalTo(this.state.id)
+      .on('value',snap=>{this.setState({posts:snap.val()})})
   }
 
+  /**
+   * Obtencion de datos
+   * Posible paso a peticion GET
+   */
   componentWillMount() {
     const { match: { params } } = this.props;
     firebase.database()
@@ -26,13 +42,17 @@ class Profile extends Component {
       })
   }
 
-
   render() {
     return (
       <div id="perfil" className="block">
-        <h2>{this.state.user.nombre}</h2>
-        <img src={this.state.img} alt='foto de perfil' />
-        <button className="button">Enviar mensaje</button>
+        <section>
+          <h2>{this.state.user.nombre}</h2>
+          <img src={this.state.img} alt='foto de perfil' />
+          <button className="button">Enviar mensaje</button>
+        </section>
+        <section>
+          {}
+        </section>
       </div>
     )
   }

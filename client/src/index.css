@@ -176,19 +176,23 @@ label > p {
   margin: .5em 0;
   padding: 0 .5em;
   width: calc(100% - 1em);
+  display: flex;
+  justify-content: space-between;
 }
 
-.post > div {
-  display: flex;
+.post p {
+  margin: .7em 0 .2em 0;
+  align-self: center;
+}
+
+.post img {
+  margin: 1em;
+  align-self: center;
+  border-radius: .2em;
 }
 
 .buttonContainer{
   margin: .5em 0;
-}
-
-.post > div > * {
-  margin: 0 2em;
-  align-self: center;
 }
 /* home */
 
@@ -197,5 +201,3 @@ label > p {
   flex-wrap: wrap;
   flex-direction: column;
 }
-
-
