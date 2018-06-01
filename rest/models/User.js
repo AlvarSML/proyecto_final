@@ -36,15 +36,14 @@ class User {
 
   crearRegistro(uid, nombre) {
     const db = Admin.database().ref('usuarios');
-    db.push({
-      userid: uid,
+    db
+    .child(uid)
+    .set({
       posts: [],
       privilegios: 1,
       nombre: nombre,
       imagen: 'default.jpg'
     })
-
-
   }
 
   createUser() {

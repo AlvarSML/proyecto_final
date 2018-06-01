@@ -49,9 +49,9 @@ header {
   margin: 0 auto;
   text-align: center;
 }
+text-decoration: none;
 
 a {
-  text-decoration: none;
   padding: 0;
   margin: 0;
   font-size: 15px;
@@ -72,8 +72,8 @@ form, .block {
 .block img {
   width: 10em;
 }
-
 input, .button, textarea {
+
   border: 2px solid #7fa99b;
   background-color: #7fa99b;
   border-radius: .2em;
@@ -81,6 +81,12 @@ input, .button, textarea {
   font-family: Montserrat;
   font-weight: 900;
   height: 1.7em;
+}
+
+.post .button {
+  background-color:#394a51;
+  color:#fbf2d5;
+  margin: 0.3em 0;
 }
 
 form > * {
@@ -93,6 +99,7 @@ form > * {
   position: relative;
   width: 8em;
   border-radius: 10%; 
+  margin: 0 0 .3em 0;
 }
 
 input[type=text], input[type=password], input[type=email], input[type=file], textarea{
@@ -158,6 +165,12 @@ label > p {
   align-items: center; 
 }
 
+#user > hr {
+  width: 80%;
+  margin: .7em auto;
+  border: 2px solid #394a51;
+}
+
 /* posts */
 
 #posts {
@@ -191,7 +204,7 @@ label > p {
   border-radius: .2em;
 }
 
-.buttonContainer{
+.buttonConbutainer{
   margin: .5em 0;
 }
 /* home */
@@ -200,4 +213,16 @@ label > p {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+}
+
+.fixed {
+  position: fixed;
+  /* temporal */
+  height: 3em;
+  background-color: #000;
+}
+
+.bottom {
+  width: 100%;
+  bottom: 0;
 }

@@ -33,6 +33,10 @@ class User extends Component {
         console.error('error de usuario');
       }
 
+
+      /**
+       * pasar al constructor
+       */
       firebase.database()
         .ref('usuarios')
         .orderByChild('userid')

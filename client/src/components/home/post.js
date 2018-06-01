@@ -56,6 +56,7 @@ class Post extends Component {
 
   }
 
+
   /**
    * Funcion que inserta un usuario en un campo si no esta previamente
    * Depende del nombre del boton en el que se ejecute
