@@ -21,6 +21,7 @@ class Profile extends Component {
 
     this.startChat = this.startChat.bind(this)
     this.newChat = this.newChat.bind(this)
+
   }
 
   /**
@@ -37,16 +38,18 @@ class Profile extends Component {
     const { match: { params } } = this.props;
     firebase.database()
       .ref('/usuarios')
-      .orderByChild('userid')
-      .equalTo(params.uid)
+      .child(params.uid)
       .once('value', data => {
-        if (data.val() !== null) this.setState({ user: data.val()[Object.keys(data.val())[0]] })
-        firebase.storage()
-          .ref('profiles/' + data.val()[Object.keys(data.val())[0]].imagen)
-          .getDownloadURL()
-          .then(url => this.setState({ img: url }))
-          .catch(error => console.log(error))
-      })
+        if (data.val() !== null) {
+          this.setState({ user: data.val() });
+          firebase.storage()
+            .ref('profiles/' + data.val().imagen)
+            .getDownloadURL()
+            .then(url => this.setState({ img: url }))
+            .catch(error => console.log(error))
+        }
+      }
+      )
   }
 
   componentDidMount() {
@@ -64,30 +67,15 @@ class Profile extends Component {
         nombre: 'chat de ' + this.state.user.nombre
       })
       .then(obj => {
-        const usr = usuarios
-          .orderByChild('userid')
-          .equalTo(auth().currentUser.uid)
-
-          console.log(usr)
-          /*
-          .child('chats')
-          .push({chat:'asd'})
-          .then(obj=>console.log(obj))
-          */
+        usuarios
+          .child(auth().currentUser.uid)
+          .update({ chats: { [obj.key]: true } })
       })
-
-
-
-
-
-    this.newChat();
+    //this.newChat();
   }
 
   newChat() {
-    database()
-      .ref('/')
-      .child('chats')
-      .push({ titulo: 'Chat' })
+    
   }
 
   render() {
@@ -98,6 +86,7 @@ class Profile extends Component {
         <img src={this.state.img} alt='foto de perfil' />
         <button className="button" onClick={this.startChat}>Enviar mensaje</button>
         <hr />
+        <p>Eventos creados</p>
         <section>
           {Object.keys(this.state.posts).map(
             (key, index) => {

@@ -30,7 +30,6 @@ class Posts extends Component {
     if (this.state.posts) return Object.keys(this.state.posts).slice(0,20).map(
       (key, index) => {
         const obj = this.state.posts[key];
-        console.log(key);
         return (
           <Post            
             titulo={obj.titulo}

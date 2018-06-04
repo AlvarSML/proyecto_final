@@ -48,12 +48,14 @@ class Post extends Component {
     //cargar datos del usuario creador
     let item = firebase.database()
       .ref('/usuarios')
-      .orderByChild('userid')
-      .equalTo(this.state.user)
-      .limitToFirst(1)
-
-    item.once('value', data => this.setState({ name: (data.val()[Object.keys(data.val())[0]].nombre) }))
-
+      .child(this.state.user)
+      .once('value', data => {
+        if (data.val()) {
+          this.setState({ name: data.val().nombre })
+        } else {
+          this.setState({ name: 'usuario eliminado'})
+        }
+      })
   }
 
 
@@ -80,29 +82,29 @@ class Post extends Component {
   render() {
     return (
       <section key={this.state.key} className="post">
-          <div>
-            <p className="titulo">{this.state.titulo}</p>
-            <hr />
-            <p>{this.state.cuerpo}</p>
-            <p>El evento empezara el dia: {this.state.inicio}</p>
-            <p>Y terminara el dia: {this.state.final}</p>
-            <p></p>
-            <hr />
-            <p>Creado por:</p>
-            <Link to={`/users/${this.state.user}`}>{this.state.name}</Link>
-            <hr />
-            <div className="buttonContainer">
-              <button name="positivos" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.likes || {}).length} me gusta</button>
-              <button name="asistentes" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.asistentes || {}).length} voy a ir</button>
-              <button name="compartir" className='button'>Compartir</button>
-            </div>
+        <div>
+          <p className="titulo">{this.state.titulo}</p>
+          <hr />
+          <p>{this.state.cuerpo}</p>
+          <p>El evento empezara el dia: {this.state.inicio}</p>
+          <p>Y terminara el dia: {this.state.final}</p>
+          <p></p>
+          <hr />
+          <p>Creado por:</p>
+          <Link to={`/users/${this.state.user}`}>{this.state.name}</Link>
+          <hr />
+          <div className="buttonContainer">
+            <button name="positivos" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.likes || {}).length} me gusta</button>
+            <button name="asistentes" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.asistentes || {}).length} voy a ir</button>
+            <button name="compartir" className='button'>Compartir</button>
           </div>
-          <img
-            src={`https://maps.googleapis.com/maps/api/staticmap?center=${this.state.location.lat},${this.state.location.lng}&zoom=11&size=400x400\
+        </div>
+        <img
+          src={`https://maps.googleapis.com/maps/api/staticmap?center=${this.state.location.lat},${this.state.location.lng}&zoom=11&size=400x400\
               &markers=color:red%7C${this.state.location.lat},${this.state.location.lng}
               &key=AIzaSyACjVIcxYixmV3QHW8PFjUvlcUtxyZQHlY`}
-            alt='map'
-          />
+          alt='map'
+        />
       </section>
     )
   }

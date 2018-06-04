@@ -25,31 +25,22 @@ class User extends Component {
    */
   componentWillMount() {
     firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.setState({
-          user: user
-        });
-      } else {
-        console.error('error de usuario');
-      }
+
+      this.setState({
+        user: user
+      });
 
 
-      /**
-       * pasar al constructor
-       */
       firebase.database()
         .ref('usuarios')
-        .orderByChild('userid')
-        .equalTo(this.state.user.uid)
+        .child(this.state.user.uid)
         .once('value', data => {
-          let img, obj = data.val();
-          for (let i in obj) {
-            img = obj[i].imagen
-          }
-          return firebase.storage()
-            .ref('profiles/'+img)
+          let img = data.val().imagen;
+          firebase.storage()
+            .ref('profiles/' + img)
             .getDownloadURL().then(url => {
-              return this.setState({img:url})
+              console.log(url);
+              return this.setState({ img: url })
             });
         })
 
