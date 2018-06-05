@@ -81,9 +81,9 @@ class Post extends Component {
 
   render() {
     return (
-      <section key={this.state.key} className="post">
+      <section key={this.state.key} className="post" >
         <div>
-          <p className="titulo">{this.state.titulo}</p>
+          <Link to={`/post/${this.state.key}`} className="titulo">{this.state.titulo}</Link>
           <hr />
           <p>{this.state.cuerpo}</p>
           <p>El evento empezara el dia: {this.state.inicio}</p>

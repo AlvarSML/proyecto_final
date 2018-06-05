@@ -89,6 +89,7 @@ class Profile extends Component {
 
   }
 
+  //tarda en cargar
   existsChat() {
     database()
       .ref('usuarios')

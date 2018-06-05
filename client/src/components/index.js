@@ -8,6 +8,7 @@ import { Route, withRouter } from 'react-router-dom';
 import NewPost from './home/newpost';
 import Profile from './profile';
 import Mensajes from './mensajes/mensajes';
+import Detalles from './detalles/detallesPost';
 
 /**
  * @class Index
@@ -23,6 +24,7 @@ class Index extends React.Component {
           <Route path="*/nevento" component={NewPost} />
           <Route path='/home*' component={Home} />          
           <Route path="/users/:uid" component={Profile} />
+          <Route path="/post/:postid" component={Detalles} />
           <Mensajes />
         </div>
       </div>

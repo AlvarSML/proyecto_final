@@ -76,7 +76,6 @@ class Chat extends Component {
     return (
       <div className="chat">
         <div className="chatHeader">
-          {console.log(this.state.data)}
           <p>{/*this.state.data.nombre*/}</p>
           <input type="checkbox" name="open" onChange={this.collapse} />
         </div>
