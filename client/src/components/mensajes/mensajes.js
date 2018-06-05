@@ -10,7 +10,6 @@ class Mensajes extends Component {
       chatData: {},
       user: ''
     }
-    this.getChats = this.getChats.bind(this)
   }
 
 
@@ -23,9 +22,6 @@ class Mensajes extends Component {
             .child(user.uid)
             .on('value', data => this.setState({ chats: data.val().chats }))
       })
-  }
-
-  getChats() {
   }
 
   render() {

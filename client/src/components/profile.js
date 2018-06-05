@@ -1,11 +1,13 @@
 /**
 * TODO : posible carga directa desde el servidor, al menos de los datos
 */
+'use strict';
 
 import React, { Component } from 'react';
 import firebase, { database, auth } from 'firebase';
 import Post from './home/post'
 import { create } from 'domain';
+import { ENGINE_METHOD_DIGESTS } from 'constants';
 
 class Profile extends Component {
   constructor(props) {
@@ -14,13 +16,20 @@ class Profile extends Component {
       user: {},
       img: '',
       id: props.match.params.uid,
-      posts: []
+      posts: [],
+      usuario: '',
+      chatsUser: null,
+      chatsProfile: null,
+      coincidencia: true
     }
-    this.chatsUser;
-    this.chatsProfile;
+
 
     this.startChat = this.startChat.bind(this)
-    this.newChat = this.newChat.bind(this)
+    this.existsChat = this.existsChat.bind(this)
+
+    auth().onAuthStateChanged(user => {
+      this.setState({ usuario: user.uid })
+    })
 
   }
 
@@ -57,11 +66,12 @@ class Profile extends Component {
   }
 
   startChat() {
-    let chats1, chats2;
+    this.existsChat();
+
     const usuarios = database().ref('usuarios');
     const chats = database().ref('chats');
 
-    chats
+    if (!this.state.coincidencia) chats
       .push({
         mensajes: {},
         nombre: 'chat de ' + this.state.user.nombre
@@ -70,12 +80,44 @@ class Profile extends Component {
         usuarios
           .child(auth().currentUser.uid)
           .update({ chats: { [obj.key]: true } })
+
+        database()
+          .ref('usuarios')
+          .child(this.state.id)
+          .update({ chats: { [obj.key]: true } })
       })
-    //this.newChat();
+
   }
 
-  newChat() {
-    
+  existsChat() {
+    database()
+      .ref('usuarios')
+      .child(this.state.usuario)
+      .child('chats')
+      .once('value', data => {
+        this.setState({ chatsUser: Object.keys(data.val() || {}) });
+      });
+
+    database()
+      .ref('usuarios')
+      .child(this.state.id)
+      .child('chats')
+      .once('value', data => {
+        this.setState({ chatsProfile: Object.keys(data.val() || {}) });
+      });
+
+    if (this.state.chatsProfile) {
+      this.state.chatsProfile.forEach(val => {
+        if (this.state.chatsUser.find(a => a == val)){
+          this.setState({ coincidencia: true })
+        } else {
+          this.setState({ coincidencia: false })
+        }
+      })
+
+    }
+
+
   }
 
   render() {

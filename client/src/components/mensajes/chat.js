@@ -1,3 +1,5 @@
+'use strict';
+
 import React, { Component } from 'react';
 import { database, auth } from 'firebase';
 
@@ -6,14 +8,21 @@ class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {},
+      data: {nombre:'[error]'},
       key: props.chatKey,
       message: '',
-      mensajes: {}
+      mensajes: {},
+      collapse: true,
+      usuario: ''
     }
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.collapse = this.collapse.bind(this);
+
+    auth().onAuthStateChanged(user=>{
+      this.setState({usuario:user.uid})
+    })
   }
 
   componentWillMount() {
@@ -21,32 +30,34 @@ class Chat extends Component {
       .ref('chats')
       .child(this.state.key)
       .on('value', data => {
-        this.setState({
+        if (data) this.setState({
           data: data.val()
         })
       })
-    
-      database()
-        .ref('chats')
-        .child(this.state.key)
-        .child('mensajes')
-        .on('value',data=>{
-          this.setState({mensajes:data.val()})
-        })
+
+    database()
+      .ref('chats')
+      .child(this.state.key)
+      .child('mensajes')
+      .on('value', data => {
+        if (data.val()) this.setState({ mensajes: data.val() })
+      })
   }
 
-  handleSubmit(e){
+  handleSubmit(e) {
     e.preventDefault();
     database()
       .ref('chats')
       .child(this.state.key)
       .child('mensajes')
       .push({
-        msg:this.state.message,
-        usuario:auth().currentUser.uid,
+        msg: this.state.message,
+        usuario: auth().currentUser.uid,
         date: new Date().getTime()
       })
-    }
+
+    this.setState({ message: '' })
+  }
 
   handleChange(e) {
     const value = e.target.value;
@@ -57,24 +68,33 @@ class Chat extends Component {
     });
   }
 
+  collapse() {
+    this.setState({ collapse: !this.state.collapse })
+  }
+
   render() {
     return (
       <div className="chat">
         <div className="chatHeader">
-          <p className="titulo">{this.state.data.nombre}</p>
-          <input type="checkbox" name="open" />
+          {console.log(this.state.data)}
+          <p>{/*this.state.data.nombre*/}</p>
+          <input type="checkbox" name="open" onChange={this.collapse} />
         </div>
-        <div className="msgArea">
+        <div className={(this.state.collapse) ? 'msgArea collapse' : 'msgArea'}>
           {
-            Object.keys(this.state.mensajes).map((key,index)=>{
-              return <p key={key}>{this.state.mensajes[key].msg}</p>
+            Object.keys(this.state.mensajes).map((key, index) => {
+              let mensaje = this.state.mensajes[key];
+              //asd
+              let userMsg = mensaje.usuario === this.state.usuario;
+              return <p key={key} className={(userMsg) ? 'host' : 'otherUser'}>{mensaje.msg}</p>
             })
           }
-          <form id="chatInput" onSubmit={this.handleSubmit}>
-            <input type="text" name="message" onChange={this.handleChange}/>
-            <input type="submit" name="subChat" value=">" />
-          </form>
         </div>
+        <form id="chatInput" onSubmit={this.handleSubmit} className={(this.state.collapse) ? 'collapse' : ''}>
+          <input type="text" name="message" value={this.state.message} onChange={this.handleChange} />
+          <input type="submit" name="subChat" value=">" />
+        </form>
+
       </div>
     )
   }
