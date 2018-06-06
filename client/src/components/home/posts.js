@@ -23,6 +23,8 @@ class Posts extends Component {
    * Pasa los datos de JSON -> JSX para mostrarlos en pantalla
    * cada post se identifica con una key para poder interactuar con ellos
    * muestra los 20 ultimos (funcion map)
+   * 
+   * NO carga a veces
    */
   toHtml() {
     if (this.state.posts) return Object.keys(this.state.posts).slice(0,20).map(
@@ -31,12 +33,17 @@ class Posts extends Component {
         return (
           <Post            
             titulo={obj.titulo}
+            inicio={obj.inicio}
+            final={obj.final}
             cuerpo={obj.cuerpo}
             user={obj.user}
             keyValue={key}
             key={key}
             likes={obj.positivos}
             currUser={this.state.user}
+            positivos={obj.positivos}
+            asistentes={obj.asistentes}
+            location={obj.localizacion}
           />
         )
       })
