@@ -16,7 +16,7 @@ class Profile extends Component {
       user: {},
       img: '',
       id: props.match.params.uid,
-      posts: [],
+      posts: {},
       usuario: '',
       chatsUser: null,
       chatsProfile: null,
@@ -42,7 +42,7 @@ class Profile extends Component {
       .ref('/posts')
       .orderByChild('user')
       .equalTo(this.state.id)
-      .on('value', snap => { this.setState({ posts: snap.val() }) })
+      .on('value', snap => { if (snap.val()) this.setState({ posts: snap.val() }) })
 
     const { match: { params } } = this.props;
     firebase.database()

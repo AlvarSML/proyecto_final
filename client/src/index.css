@@ -292,3 +292,20 @@ label > p {
 .otherUser{
   background-color: #3eff004d
 }
+
+/* Detalles */
+.detalles .buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.asistentes {
+  background-color: #394a51;
+  border-radius: .2em;
+}
+
+.asistentes a{
+  color: #fbf2d5;
+  margin: .3em;
+}
