@@ -42,16 +42,36 @@ class Config extends Component {
    */
   handleSubmit(e) {
     e.preventDefault()
+
+    //envio de datos con post
+    fetch('/home/config',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        img: `profiles/${this.state.user.uid}.jpg`,
+        name: this.state.newName,
+        user: firebase.auth().currentUser.uid
+      })
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      this.setState({
+        error: data.respuesta
+      })
+    })
+
+    // Subida de imagen, mas rapido desde el cliente
+    const file = e.target.image.files[0];
+    const storageRef = firebase.storage().ref(`profiles/${this.state.user.uid}.jpg`);
+    storageRef.put(file);
+
+    /*
     this.setState({
       email: this.state.user.email
     });
-
-
-    const file = e.target.image.files[0];
-    const storageRef = firebase.storage().ref(`profiles/${this.state.user.uid}.jpg`);
-    const task = storageRef.put(file);
-
-    console.log(task);
 
     firebase.auth().onAuthStateChanged(user => {
       return user.updateProfile({
@@ -64,6 +84,8 @@ class Config extends Component {
       });
 
     });
+
+    */
 
   }
 
