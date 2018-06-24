@@ -66,26 +66,15 @@ class Config extends Component {
     // Subida de imagen, mas rapido desde el cliente
     const file = e.target.image.files[0];
     const storageRef = firebase.storage().ref(`profiles/${this.state.user.uid}.jpg`);
+
+    firebase.database()
+      .ref('usuarios')
+      .child(this.state.user.uid)
+      .update({
+        imagen: `${this.state.user.uid}.jpg`
+      })
+
     storageRef.put(file);
-
-    /*
-    this.setState({
-      email: this.state.user.email
-    });
-
-    firebase.auth().onAuthStateChanged(user => {
-      return user.updateProfile({
-        displayName: this.state.newName,
-        photoURL: this.state.img
-      }).then(function () {
-        console.log('OK');
-      }).catch(function (error) {
-        console.log('error')
-      });
-
-    });
-
-    */
 
   }
 
@@ -94,7 +83,7 @@ class Config extends Component {
    */
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} id="config">
         <label>
           <p>Nuevo nombre</p>
         <input type="text" name="newName" onChange={this.handleChange} />

@@ -18,6 +18,7 @@ class Profile extends Component {
       id: props.match.params.uid,
       posts: {},
       usuario: '',
+      nomUsuario: '',
       chatsUser: null,
       chatsProfile: null,
       coincidencia: true
@@ -27,10 +28,23 @@ class Profile extends Component {
     this.startChat = this.startChat.bind(this)
     this.existsChat = this.existsChat.bind(this)
 
+    //no deberia existir
     auth().onAuthStateChanged(user => {
-      this.setState({ usuario: user.uid })
+      this.setState({
+        usuario: user.uid,
+      })
+
+      firebase.database()
+      .ref('usuarios')
+      .child(user.uid)
+      .child('nombre')
+      .on('value', data => this.setState({
+        nomUsuario: data.val()
+      }))
+
     })
 
+   
   }
 
   /**
@@ -57,8 +71,10 @@ class Profile extends Component {
             .then(url => this.setState({ img: url }))
             .catch(error => console.log(error))
         }
-      }
-      )
+      })
+
+    console.log(this.state.nomUsuario);
+
   }
 
   componentDidMount() {
@@ -67,14 +83,14 @@ class Profile extends Component {
 
   startChat() {
     this.existsChat();
-
+    console.log(this.state.coincidencia);
     const usuarios = database().ref('usuarios');
     const chats = database().ref('chats');
 
     if (!this.state.coincidencia) chats
       .push({
         mensajes: {},
-        nombre: 'chat de ' + this.state.user.nombre
+        nombre: 'chat de ' + this.state.user.nombre + ' y ' + this.state.nomUsuario
       })
       .then(obj => {
         usuarios
@@ -108,14 +124,20 @@ class Profile extends Component {
       });
 
     if (this.state.chatsProfile) {
+      console.log('lol')
       this.state.chatsProfile.forEach(val => {
-        if (this.state.chatsUser.find(a => a == val)){
+        if (this.state.chatsUser.find(a => a == val)) {
           this.setState({ coincidencia: true })
         } else {
+          console.log('chat');
           this.setState({ coincidencia: false })
         }
       })
 
+      if (this.state.chatsProfile.length === 0 && this.state.chatsUser.length === 0) {
+        this.setState({ coincidencia: false });
+
+      }
     }
 
 

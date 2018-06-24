@@ -117,10 +117,12 @@ class Detalles extends Component {
   render() {
     return (
       <div className="detalles block">
+        <h3>{this.state.titulo}</h3>
+        <hr />
         {this.getMap()}
         <a href={`https://www.google.com/maps/search/?api=1&query=${this.state.localizacion.lat},${this.state.localizacion.lng}`} target="_blank">Abrir en maps</a>
         <hr />
-        <h3>{this.state.titulo}</h3>
+
         <p>{this.state.cuerpo}</p>
         <hr />
         <p>El evento empezara el dia: {this.state.inicio}</p>
@@ -133,10 +135,20 @@ class Detalles extends Component {
         </div>
         <hr />
 
-        <h3>Asistentes</h3>
-        <div className="asistentes">
-          {this.getAsistentes()}
-          {this.getPositivos()}
+        <div className="detalles_datos">
+          <div>
+            <h3>Asistentes 🏃‍</h3>
+            <div className="asistentes">
+              {this.getAsistentes()}
+
+            </div>
+          </div>
+          <div>
+            <h3>Megustas 👍</h3>
+            <div className="asistentes">
+              {this.getPositivos()}
+            </div>
+          </div>
         </div>
       </div>
     )

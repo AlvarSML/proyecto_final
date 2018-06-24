@@ -16,11 +16,14 @@ class Mensajes extends Component {
   componentWillMount() {
     firebase.auth()
       .onAuthStateChanged(user => {
-        if (user)
+        if (user){
           firebase.database()
             .ref('usuarios')
             .child(user.uid)
             .on('value', data => this.setState({ chats: data.val().chats }))
+        } else {
+          this.setState({chats: []})
+        }
       })
   }
 

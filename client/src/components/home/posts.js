@@ -13,7 +13,11 @@ class Posts extends Component {
   constructor(p) {
     super(p);
     this.state = {};
-    this.db = firebase.database().ref('posts').orderByChild('inicio');
+    this.db = firebase
+      .database()
+      .ref('posts')
+      .orderByChild('inicio');
+      
     this.db.once('value', data => this.setState({ posts: data.val() }));
     this.db.on('value', data => this.setState({ posts: data.val() }));
     firebase.auth().onAuthStateChanged(user=>this.setState({user:user}))

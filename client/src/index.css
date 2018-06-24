@@ -3,6 +3,10 @@ html{
   font-family: Montserrat;
 }
 
+form {
+  animation: slide-up 0.4s ease;
+}
+
 #container {
   display: flex;
   justify-content: space-evenly;
@@ -10,8 +14,9 @@ html{
 }
 
 #home, form{
-  width: 35em;
+  min-width: 30em;
   align-self: flex-start;
+  align-items: stretch;
 }
 
 /* map */
@@ -40,6 +45,7 @@ hr {
   font-size: 1.5em;
   font-weight: 900;
   text-align: center;
+  margin: .2em 0 0 0;
 }
 
 /* Componentes Cabezera */
@@ -86,6 +92,10 @@ input, .button, textarea {
   background-color:#394a51;
   color:#fbf2d5;
   margin: 0.3em 0;
+}
+
+.button {
+  cursor: pointer;
 }
 
 form > * {
@@ -187,7 +197,7 @@ label > p {
   background-color: #7fa99b;
   border-radius: .2em;
   margin: .5em 0;
-  padding: 0 .5em;
+  padding: .2em .5em;
   width: calc(100% - 1em);
   display: flex;
   justify-content: space-between;
@@ -294,18 +304,87 @@ label > p {
 }
 
 /* Detalles */
+.detalles h3{
+  text-align: center;
+}
+
+.detalles hr {
+  width: 100%;
+}
+
 .detalles .buttonContainer {
   width: 100%;
   display: flex;
   justify-content: space-around;
 }
 
+.detalles_datos {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
 .asistentes {
   background-color: #394a51;
   border-radius: .2em;
+  padding: .1em 0;
 }
 
 .asistentes a{
   color: #fbf2d5;
   margin: .3em;
+}
+
+.eventTitle {
+  color: #394a51;
+  text-decoration: none;
+  transition: .4s all linear;
+}
+
+.eventTitle:hover {
+  color: #394a5181;
+}
+
+.link {
+  color: #fbf2d5;
+  border: 2px solid #fbf2d5;
+  border-radius: 3px;
+  align-self: flex-start;
+  display: inline;
+  text-decoration: none;
+  padding: .1em .2em;
+  transition: .4s all linear;
+
+}
+
+.link:hover {
+  border: 2px solid #fbf2d571;
+}
+
+#config {
+  align-self: stretch;
+  animation: slide-up 0.4s ease;
+}
+
+@keyframes slide-up {
+  0% {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.cuerpo {
+  border: 2px solid #fbf2d54f;
+  border-radius: 2px;
+  box-sizing: border-box;
+  padding: .2em;
+  transition: all .2s linear;
+}
+
+.cuerpo:hover {
+  background-color: #fbf2d54f;
 }

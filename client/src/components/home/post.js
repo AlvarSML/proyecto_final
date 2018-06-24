@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import firebase from 'firebase';
+import firebase, { database } from 'firebase';
 import MapComponent from './mapsapi';
 import { Link } from 'react-router-dom';
 
@@ -53,9 +53,21 @@ class Post extends Component {
         if (data.val()) {
           this.setState({ name: data.val().nombre })
         } else {
-          this.setState({ name: 'usuario eliminado'})
+          this.setState({ name: 'usuario eliminado' })
         }
       })
+
+    database()
+      .ref('posts')
+      .child(this.state.key)
+      .on('value', data => {
+        this.setState({
+          positivos: data.val().positivos,
+          asistentes: data.val().asistentes
+        })
+      })
+
+
   }
 
 
@@ -69,13 +81,18 @@ class Post extends Component {
     let field = {};
 
     //previene nulos
-    if (!this.state[element] === 0 || !this.state[element] === null) {
+    if (this.state[element] !== undefined) {
       field = this.state[element]
     }
 
-    if (!field[this.state.currUser.uid]) {
-      let post = firebase.database().ref('/posts').child(this.state.key).child(element);
+    if (field[this.state.currUser.uid] === undefined) {
+
+      let post = database().ref('/posts').child(this.state.key).child(element);
       post.update({ [this.state.currUser.uid]: true })
+    } else {
+
+      let post = database().ref('/posts').child(this.state.key).child(element).child(this.state.currUser.uid);
+      post.remove()
     }
   }
 
@@ -83,19 +100,19 @@ class Post extends Component {
     return (
       <section key={this.state.key} className="post" >
         <div>
-          <Link to={`/post/${this.state.key}`} className="titulo">{this.state.titulo}</Link>
+          <Link to={`/post/${this.state.key}`} className="titulo eventTitle">{this.state.titulo}</Link>
           <hr />
-          <p>{this.state.cuerpo}</p>
+          <p className="cuerpo">{this.state.cuerpo}</p>
           <p>El evento empezara el dia: {this.state.inicio}</p>
           <p>Y terminara el dia: {this.state.final}</p>
           <p></p>
           <hr />
           <p>Creado por:</p>
-          <Link to={`/users/${this.state.user}`}>{this.state.name}</Link>
+          <Link to={`/users/${this.state.user}`} className="link">{this.state.name}</Link>
           <hr />
           <div className="buttonContainer">
-            <button name="positivos" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.likes || {}).length} me gusta</button>
-            <button name="asistentes" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.asistentes || {}).length} voy a ir</button>
+            <button name="positivos" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.likes || {}).length} - 👍</button>
+            <button name="asistentes" className='button' onClick={this.genericIncrement}>{Object.keys(this.state.asistentes || {}).length} - voy a ir</button>
             <button name="compartir" className='button'>Compartir</button>
           </div>
         </div>
