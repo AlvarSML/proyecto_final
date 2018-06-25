@@ -12,15 +12,17 @@ class Mensajes extends Component {
     }
   }
 
-
   componentWillMount() {
     firebase.auth()
       .onAuthStateChanged(user => {
-        if (user)
+        if (user){
           firebase.database()
             .ref('usuarios')
             .child(user.uid)
             .on('value', data => this.setState({ chats: data.val().chats }))
+        } else {
+          this.setState({chats: {}})
+        }
       })
   }
 
@@ -28,7 +30,6 @@ class Mensajes extends Component {
     return (
       <div id="mensajes" className="fixed bottom">
         {
-          //chapucilla
           Object.keys(this.state.chats || {}).map(key =>
             <Chat
               key={key}

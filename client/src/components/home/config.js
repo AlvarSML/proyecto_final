@@ -42,28 +42,39 @@ class Config extends Component {
    */
   handleSubmit(e) {
     e.preventDefault()
-    this.setState({
-      email: this.state.user.email
-    });
 
+    //envio de datos con post
+    fetch('/home/config',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        img: `profiles/${this.state.user.uid}.jpg`,
+        name: this.state.newName,
+        user: firebase.auth().currentUser.uid
+      })
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      this.setState({
+        error: data.respuesta
+      })
+    })
 
+    // Subida de imagen, mas rapido desde el cliente
     const file = e.target.image.files[0];
     const storageRef = firebase.storage().ref(`profiles/${this.state.user.uid}.jpg`);
-    const task = storageRef.put(file);
 
-    console.log(task);
+    firebase.database()
+      .ref('usuarios')
+      .child(this.state.user.uid)
+      .update({
+        imagen: `${this.state.user.uid}.jpg`
+      })
 
-    firebase.auth().onAuthStateChanged(user => {
-      return user.updateProfile({
-        displayName: this.state.newName,
-        photoURL: this.state.img
-      }).then(function () {
-        console.log('OK');
-      }).catch(function (error) {
-        console.log('error')
-      });
-
-    });
+    storageRef.put(file);
 
   }
 
@@ -72,7 +83,7 @@ class Config extends Component {
    */
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} id="config">
         <label>
           <p>Nuevo nombre</p>
         <input type="text" name="newName" onChange={this.handleChange} />

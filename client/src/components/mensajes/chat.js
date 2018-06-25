@@ -13,7 +13,10 @@ class Chat extends Component {
       message: '',
       mensajes: {},
       collapse: true,
-      usuario: ''
+      usuario: '',
+      data: {
+        nombre: 'wait'
+      }
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -26,13 +29,16 @@ class Chat extends Component {
   }
 
   componentWillMount() {
+
     database()
       .ref('chats')
       .child(this.state.key)
       .on('value', data => {
-        if (data) this.setState({
+        if (data.val()) this.setState({
           data: data.val()
         })
+
+        console.log(data.val());
       })
 
     database()
@@ -73,10 +79,14 @@ class Chat extends Component {
   }
 
   render() {
+
+
+
     return (
       <div className="chat">
         <div className="chatHeader">
-          <p>{/*this.state.data.nombre*/}</p>
+          
+          <p>{this.state.data.nombre}</p>
           <input type="checkbox" name="open" onChange={this.collapse} />
         </div>
         <div className={(this.state.collapse) ? 'msgArea collapse' : 'msgArea'}>
