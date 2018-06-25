@@ -14,7 +14,7 @@ form {
 }
 
 #home, form{
-  min-width: 30em;
+  min-width: 20em;
   align-self: flex-start;
   align-items: stretch;
 }
@@ -71,7 +71,12 @@ form, .block {
   padding: 1em;
   border-radius: .5em;
   color: #394a51;
-  min-width: 30em;
+  width: 30%;
+  min-width: 20em;
+}
+
+.block:last-child {
+  margin: 1em 0 6em 0;
 }
 
 .block img {
@@ -86,6 +91,7 @@ input, .button, textarea {
   font-family: Montserrat;
   font-weight: 900;
   height: 1.7em;
+  height: auto;
 }
 
 .post .button {
@@ -220,9 +226,15 @@ label > p {
 /* home */
 
 #home {
+  width: 40%;
+  min-width: 20em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+}
+
+#home > * {
+  width: 100%;
 }
 
 .fixed { 
@@ -244,7 +256,7 @@ label > p {
   width: 25%;
   border-radius: .2em;
   border: 4px solid #394a51;
-  
+  align-self: flex-end;
 }
 
 .chat p {
@@ -293,6 +305,12 @@ label > p {
 }
 
 /* Mensajes */
+
+#mensajes {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .host{
   background-color: #fbf2d5;
   align-self: flex-end;

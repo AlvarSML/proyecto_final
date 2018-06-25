@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import firebase, { database, auth } from 'firebase';
 import Post from './home/post'
 import { create } from 'domain';
-import { ENGINE_METHOD_DIGESTS } from 'constants';
+import { ENGINE_METHOD_DIGESTS, EPERM } from 'constants';
 
 class Profile extends Component {
   constructor(props) {
@@ -82,36 +82,41 @@ class Profile extends Component {
   }
 
   startChat() {
-    this.existsChat();
+    if (!this.existsChat()){
     console.log(this.state.coincidencia);
-    const usuarios = database().ref('usuarios');
-    const chats = database().ref('chats');
 
-    if (!this.state.coincidencia) chats
+
+    if (!this.state.coincidencia) 
+      database()
+      .ref('chats')
       .push({
         mensajes: {},
         nombre: 'chat de ' + this.state.user.nombre + ' y ' + this.state.nomUsuario
       })
       .then(obj => {
-        usuarios
+        database()
+          .ref('usuarios')
           .child(auth().currentUser.uid)
-          .update({ chats: { [obj.key]: true } })
+          .child('chats')
+          .update({ [obj.key]: true })
 
         database()
           .ref('usuarios')
           .child(this.state.id)
-          .update({ chats: { [obj.key]: true } })
+          .child('chats')
+          .update({ [obj.key]: true })
       })
-
+    }
   }
 
   //tarda en cargar
   existsChat() {
+
     database()
       .ref('usuarios')
       .child(this.state.usuario)
       .child('chats')
-      .once('value', data => {
+      .on('value', data => {
         this.setState({ chatsUser: Object.keys(data.val() || {}) });
       });
 
@@ -119,29 +124,34 @@ class Profile extends Component {
       .ref('usuarios')
       .child(this.state.id)
       .child('chats')
-      .once('value', data => {
+      .on('value', data => {
         this.setState({ chatsProfile: Object.keys(data.val() || {}) });
-      });
-
-    if (this.state.chatsProfile) {
-      console.log('lol')
-      this.state.chatsProfile.forEach(val => {
-        if (this.state.chatsUser.find(a => a == val)) {
-          this.setState({ coincidencia: true })
-        } else {
-          console.log('chat');
-          this.setState({ coincidencia: false })
-        }
-      })
+      }); 
+      
+      if (this.state.chatsProfile === null || this.state.chatsUser === null) {
+        this.setState({ coincidencia: false });
+        return false;
+      }
 
       if (this.state.chatsProfile.length === 0 && this.state.chatsUser.length === 0) {
         this.setState({ coincidencia: false });
-
+        return false;
       }
+
+
+      this.state.chatsUser.forEach(e=>{
+        this.state.chatsProfile.forEach(ep=>{
+          if (e === ep) {
+            this.setState({coincidencia: true});
+            return true
+          }
+        })
+      })
+
+
+      return false;
     }
 
-
-  }
 
   render() {
     return (
